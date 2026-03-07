@@ -1,12 +1,16 @@
 import express from "express";
-import postRoutes from './routes/post-route'
+import productRoutes from './routes/productRoutes';
+import orderRoutes from './routes/orderRoutes';
 
 const app = express()
-const PORT = 3000
+const PORT = 3001
 
+// Middleware
 app.use(express.json())
 
-app.use("/api/v1", postRoutes)
+// Routes
+app.use("/api/products", productRoutes)
+app.use("/api/orders", orderRoutes)
 
 app.listen(PORT, () =>{
     console.log("server is running")
