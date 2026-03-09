@@ -5,7 +5,7 @@ export interface Order {
     productId: number; // Relasi ke produknya
     quantity: number;
     totalPrice: number;
-    status: 'pending' | 'completed' | 'cancelled'; //Update ??
+    status: 'pending' | 'completed' | 'cancelled';
 }
 
 // Relasi
