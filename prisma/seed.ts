@@ -3,38 +3,60 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-    // clear old data
+    // clear old data (order matters because of relations)
+    await prisma.stock.deleteMany();
     await prisma.order.deleteMany();
     await prisma.product.deleteMany();
+    await prisma.supplier.deleteMany();
     await prisma.user.deleteMany();
 
     // create Users
-    const user = await prisma.user.createMany({
-        data:[
-            {name: "Alice", email:"alice@gmail.com"},
-            {name: "Ayu", email:"ayu@gmail.com"},
-            {name: "Andini", email:"andini@gmail.com"},
-        ]
+    const alice = await prisma.user.create({
+        data: { name: "Alice", email: "alice@gmail.com", points: 100 },
+    });
+    const ayu = await prisma.user.create({
+        data: { name: "Ayu", email: "ayu@gmail.com", points: 50 },
+    });
+    const andini = await prisma.user.create({
+        data: { name: "Andini", email: "andini@gmail.com", points: 30 },
     });
 
+    // create Suppliers
+    const supplierA = await prisma.supplier.create({ data: { name: "Supplier A" } });
+    const supplierB = await prisma.supplier.create({ data: { name: "Supplier B" } });
+
     // create Products
-    const products = await prisma.product.createMany({
-        data:[
-            {name: "Keyboard", price: 350_000, stock:10},
-            {name: "Mouse", price: 30_000, stock:15},
-            {name: "Monitor", price: 700_000, stock:20},
-            {name: "Laptop", price: 8_050_000, stock:5},
-        ]
+    const keyboard = await prisma.product.create({
+        data: { name: "Keyboard", price: 350_000 },
+    });
+    const mouse = await prisma.product.create({
+        data: { name: "Mouse", price: 30_000 },
+    });
+    const monitor = await prisma.product.create({
+        data: { name: "Monitor", price: 700_000 },
+    });
+    const laptop = await prisma.product.create({
+        data: { name: "Laptop", price: 8_050_000 },
+    });
+
+    // create Stocks (product-supplier)
+    await prisma.stock.createMany({
+        data: [
+            { productId: keyboard.id, supplierId: supplierA.id, quantity: 10 },
+            { productId: mouse.id, supplierId: supplierA.id, quantity: 15 },
+            { productId: monitor.id, supplierId: supplierB.id, quantity: 20 },
+            { productId: laptop.id, supplierId: supplierB.id, quantity: 5 },
+        ],
     });
 
     // create Orders
     await prisma.order.createMany({
-        data:[
-            {userId:1, productId:1, quantity:2},
-            {userId:1, productId:2, quantity:1},
-            {userId:2, productId:3, quantity:1},
-            {userId:3, productId:4, quantity:4},
-        ]
+        data: [
+            { userId: alice.id, productId: keyboard.id, quantity: 2 },
+            { userId: alice.id, productId: mouse.id, quantity: 1 },
+            { userId: ayu.id, productId: monitor.id, quantity: 1 },
+            { userId: andini.id, productId: laptop.id, quantity: 4 },
+        ],
     });
 }
 
