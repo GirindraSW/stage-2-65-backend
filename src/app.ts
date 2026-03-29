@@ -1,22 +1,18 @@
 import express from "express";
-import productRoutes from './routes/productRoutes';
-import orderRoutes from './routes/orderRoutes';
-import prisma from "../prisma/client";
 import router from "./routes/transferPointRoutes";
 import stockRoute from "./routes/stockRoutes";
-import { updateOrder } from "./controllers/orderControllers";
+import authRoute from "./routes/authRoutes";
 
 const app = express()
-const PORT = 3001
+const PORT = 3000
 
 // Middleware
 app.use(express.json())
 
 // Routes
-// app.use("/api/products", productRoutes)
-// app.use("/api/orders", orderRoutes)
-app.use("/api/v1", router);
-app.use("/api/v1", stockRoute);
+app.use("/", router);
+app.use("/", stockRoute);
+app.use("/auth/", authRoute);
 
 // global error handler (place after routes)
 app.use((err:any, req:any, res:any, next:any)=>{

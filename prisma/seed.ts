@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../src/utils/bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -12,13 +13,31 @@ async function main() {
 
     // create Users
     const alice = await prisma.user.create({
-        data: { name: "Alice", email: "alice@gmail.com", points: 100 },
+        data: {
+            name: "Alice",
+            email: "alice@gmail.com",
+            password: await hashPassword("password123"),
+            role: "admin",
+            points: 100,
+        },
     });
     const ayu = await prisma.user.create({
-        data: { name: "Ayu", email: "ayu@gmail.com", points: 50 },
+        data: {
+            name: "Ayu",
+            email: "ayu@gmail.com",
+            password: await hashPassword("password123"),
+            role: "user",
+            points: 50,
+        },
     });
     const andini = await prisma.user.create({
-        data: { name: "Andini", email: "andini@gmail.com", points: 30 },
+        data: {
+            name: "Andini",
+            email: "andini@gmail.com",
+            password: await hashPassword("password123"),
+            role: "user",
+            points: 30,
+        },
     });
 
     // create Suppliers
