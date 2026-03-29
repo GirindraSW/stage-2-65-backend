@@ -41,8 +41,22 @@ async function main() {
     });
 
     // create Suppliers
-    const supplierA = await prisma.supplier.create({ data: { name: "Supplier A" } });
-    const supplierB = await prisma.supplier.create({ data: { name: "Supplier B" } });
+    const supplierA = await prisma.supplier.create({
+        data: {
+            name: "Supplier A",
+            email: "supplierA@gmail.com",
+            password: await hashPassword("password123"),
+            role: "supplier",
+        },
+    });
+    const supplierB = await prisma.supplier.create({
+        data: {
+            name: "Supplier B",
+            email: "supplierB@gmail.com",
+            password: await hashPassword("password123"),
+            role: "supplier",
+        },
+    });
 
     // create Products
     const keyboard = await prisma.product.create({

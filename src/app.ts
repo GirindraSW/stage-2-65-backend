@@ -2,9 +2,11 @@ import express from "express";
 import router from "./routes/transferPointRoutes";
 import stockRoute from "./routes/stockRoutes";
 import authRoute from "./routes/authRoutes";
+import productRoutes from "./routes/productRoutes";
+import supplierRoutes from "./routes/supplierRoutes";
 
 const app = express()
-const PORT = 3000
+const PORT = 3001
 
 // Middleware
 app.use(express.json())
@@ -12,6 +14,8 @@ app.use(express.json())
 // Routes
 app.use("/", router);
 app.use("/", stockRoute);
+app.use("/products", productRoutes);
+app.use("/suppliers", supplierRoutes);
 app.use("/auth/", authRoute);
 
 // global error handler (place after routes)

@@ -12,7 +12,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password, role = "user" } = req.body;
+  const { name, email, password, role = "user" } = req.body || {};
 
   try {
     // Cek apakah email sudah ada
@@ -55,7 +55,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { email, password } = req.body;
+  const { email, password } = req.body || {};
 
   try {
     // Cari user berdasarkan email
@@ -90,7 +90,7 @@ export const login = async (req: Request, res: Response) => {
 
 // Endpoint: POST /forgot-password
 export const forgotPassword = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email } = req.body || {};
 
   if (!email) {
     return res.status(400).json({ error: "Email wajib diisi" });
@@ -127,7 +127,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 // Endpoint: POST /reset-password
 export const resetPassword = async (req: Request, res: Response) => {
-  const { token, newPassword } = req.body;
+  const { token, newPassword } = req.body || {};
 
   if (!token || !newPassword) {
     return res.status(400).json({ error: "Token dan password baru wajib diisi" });
