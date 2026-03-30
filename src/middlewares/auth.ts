@@ -3,11 +3,9 @@ import { verifyToken } from "../utils/jwt";
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.header("Authorization");
-  if (!authHeader) {
-    return res.status(401).json({ error: "Akses ditolak. Token tidak ditemukan." });
-  }
-
-  const token: string = authHeader.replace("Bearer ", "").trim();
+  const bearerToken = authHeader?.replace("Bearer ", "").trim();
+  const cookieToken = (req as any).cookies?.supplier_token;
+  const token = bearerToken || cookieToken;
 
   if (!token) {
     return res.status(401).json({ error: "Akses ditolak. Token tidak ditemukan." });

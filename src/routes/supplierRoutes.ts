@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { loginSupplier, getSupplierProducts } from "../controllers/supplierControllers";
+import { loginSupplier, getSupplierProducts, logoutSupplier } from "../controllers/supplierControllers";
 import { authenticate, authorize } from "../middlewares/auth";
 
 const router = Router();
@@ -15,5 +15,6 @@ router.post(
 );
 
 router.get("/products", authenticate, authorize(["supplier"]), getSupplierProducts);
+router.post("/logout", logoutSupplier);
 
 export default router;

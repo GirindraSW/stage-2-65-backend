@@ -22,6 +22,10 @@ export const loginSupplier = async (req: Request, res: Response) => {
     }
 
     const token = generateToken(supplier.id, supplier.role);
+    res.cookie("supplier_token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+    });
     res.json({
       message: "Login supplier berhasil",
       token,
@@ -35,6 +39,11 @@ export const loginSupplier = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
+};
+
+export const logoutSupplier = async (_req: Request, res: Response) => {
+  res.clearCookie("supplier_token");
+  res.json({ message: "Logout supplier berhasil" });
 };
 
 export const getSupplierProducts = async (req: Request, res: Response) => {

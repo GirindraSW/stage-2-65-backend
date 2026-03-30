@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { authenticate, authorize } from "../middlewares/auth";
+import { uploadProductImage } from "../utils/multer";
 import {
   getProducts,
   createProduct,
@@ -59,5 +60,26 @@ router.put(
 );
 
 router.delete("/:id", authenticate, authorize(["admin", "supplier"]), deleteProduct);
+
+router.post(
+  "/upload-image",
+  authenticate,
+  authorize(["admin", "supplier"]),
+  uploadProductImage.single("image"),
+  (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: "File wajib diupload" });
+    }
+    res.json({
+      message: "Upload gambar produk berhasil",
+      file: {
+        filename: req.file.filename,
+        path: `/uploads/products/${req.file.filename}`,
+        size: req.file.size,
+        mimetype: req.file.mimetype,
+      },
+    });
+  }
+);
 
 export default router;

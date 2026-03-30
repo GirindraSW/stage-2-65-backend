@@ -1,7 +1,8 @@
 import express from "express";
-import cors from "cors";
+import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import path from "path";
+import corsMiddleware from "./middlewares/cors";
 import router from "./routes/transferPointRoutes";
 import stockRoute from "./routes/stockRoutes";
 import authRoute from "./routes/authRoutes";
@@ -10,17 +11,12 @@ import supplierRoutes from "./routes/supplierRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 
 const app = express()
-const PORT = 3000
+const PORT = 3001
 
 // Middleware
-app.use(express.json())
-app.use(
-  cors({
-    origin: (process.env.CORS_ORIGIN || "http://localhost:5173")
-      .split(",")
-      .map((o) => o.trim()),
-  })
-);
+app.use(express.json());
+app.use(cookieParser());
+app.use(corsMiddleware);
 
 app.use(
   rateLimit({
